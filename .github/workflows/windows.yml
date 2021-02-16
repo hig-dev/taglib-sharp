@@ -24,7 +24,10 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.5
       with:
         nuget-version: latest
-
+    
+    - name: Add private NuGet repo
+      run: nuget sources add -name RSP -source "https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json" -username rsp -password ${DEVOPS_TOKEN}
+    
     - name: Clean
       run: dotnet clean --configuration Release && dotnet nuget locals all --clear
 
@@ -33,9 +36,6 @@ jobs:
 
     - name: Run unit tests
       run: dotnet test --verbosity normal
-  
-    - name: Add private NuGet repo
-      run: nuget sources add -name RSP -source "https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json" -username rsp -password ${DEVOPS_TOKEN}
 
     - name: Add package to private NuGet repo
       run: nuget push *.nupkg -source RSP -apikey rsp

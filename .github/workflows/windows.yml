@@ -28,3 +28,9 @@ jobs:
 
     - name: Run unit tests
       run: dotnet test --verbosity normal
+  
+    - name: Publish Nuget to GitHub registry
+      	run: dotnet nuget push ./<project>/out/*.nupkg -k ${DEVOPS_TOKEN} -s https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json --skip-duplicate
+    
+    env:
+      DEVOPS_TOKEN: ${{ secrets.DEVOPS_TOKEN }}

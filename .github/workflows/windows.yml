@@ -19,6 +19,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.404
+        
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: latest
 
     - name: Clean
       run: dotnet clean --configuration Release && dotnet nuget locals all --clear
@@ -29,8 +34,11 @@ jobs:
     - name: Run unit tests
       run: dotnet test --verbosity normal
   
-    - name: Publish Nuget to GitHub registry
-      run: dotnet nuget push *.nupkg --source https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json -k ${DEVOPS_TOKEN} --skip-duplicate
+    - name: Add private NuGet repo
+      run: nuget sources add -name RSP -source "https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json" -username rsp -password ${DEVOPS_TOKEN}
+
+    - name: Add package to private NuGet repo
+      run: nuget push *.nupkg -source RSP -apikey rsp
     
     env:
       DEVOPS_TOKEN: ${{ secrets.DEVOPS_TOKEN }}

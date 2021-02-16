@@ -38,7 +38,7 @@ jobs:
       run: dotnet test --verbosity normal
 
     - name: Add package to private NuGet repo
-      run: nuget push *.nupkg -source RSP -apikey az 
+      run: nuget push "**/*.nupkg" -source RSP -apikey az -SkipDuplicate
     
     env:
       DEVOPS_TOKEN: ${{ secrets.DEVOPS_TOKEN }}

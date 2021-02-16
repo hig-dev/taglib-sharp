@@ -26,7 +26,7 @@ jobs:
         nuget-version: latest
     
     - name: Add private NuGet repo
-      run: nuget sources add -name RSP -source "https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json" -password ${DEVOPS_TOKEN} -username rsp
+      run: nuget sources add -Name RSP -Source "https://hig.pkgs.visualstudio.com/_packaging/RSP/nuget/v3/index.json" -UserName rsp -Password ${env:DEVOPS_TOKEN}
     
     - name: Clean
       run: dotnet clean --configuration Release && dotnet nuget locals all --clear
